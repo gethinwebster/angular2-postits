@@ -1,0 +1,18 @@
+<section>
+    <header>
+        <div *ng-if="model.isEditing">
+            <input [(ng-model)]="model.title" placeholder="Title" />
+        </div>
+        <div *ng-if="!model.isEditing">
+            {{model.title}}
+        </div>
+    </header>
+    <content>
+        <div *ng-if="model.isEditing">
+            <input [(ng-model)]="model.body" placeholder="Body" />
+        </div>
+        <div *ng-if="!model.isEditing">
+            {{model.body}}
+        </div>
+    </content>
+</section>
