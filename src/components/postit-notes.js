@@ -21,13 +21,12 @@ export class PostitNotes {
 
     /**
      * Go and fetch the notes to display.
-     *
-     * TODO: make this call an API
      * 
      * @method getNotes
      */
     getNotes() {
-        this.loadNotes([]);
+        this.isLoading = true;
+        Postit.loadPostits().then(this.loadNotes.bind(this));
     }
 
     /**
@@ -37,6 +36,7 @@ export class PostitNotes {
      * @param  {Postit[]} notes     The array of notes to load
      */
     loadNotes(notes) {
+        this.isLoading = false;
         this.notes = notes;
         //add an empty note, as creation placeholder
         this.addEmptyNote();
@@ -61,10 +61,13 @@ export class PostitNotes {
      * @param  {Postit} noteToEdit  The note to begin editing
      */
     editNote(noteToEdit) {
+        if (noteToEdit.isDeleted || noteToEdit.isSaving) {
+            return;
+        }
         //only one note editable at a time, so save other notes first
         for (let note of this.notes) {
             //don't auto-save first note, as it's not yet been 'created'
-            if (note != this.notes[0]) {
+            if (note.isEditing && note != this.notes[0]) {
                 note.save();
             }
         }
@@ -78,9 +81,9 @@ export class PostitNotes {
      * @param  {Postit} note    The note to save
      */
     saveNote(note) {
-        if (note.title || note.body) {
-            note.save();
-        }
+        note.save().then(() => {
+            //do anything further as necessary
+        });
         //if saved note is first in list, auto-add a new note
         if (!this.notes[0].isNew) {
             this.addEmptyNote();
@@ -94,12 +97,16 @@ export class PostitNotes {
      * @param  {Postit} note    The note to save
      */
     deleteNote(note) {
-        for (let i = this.notes.length-1; i >= 0; i--) {
-            if (this.notes[i] === note) {
-                this.notes.splice(i, 1);
-                break;
+        note.deleteNote().then(() => {
+            //find index of deleted note
+            for (let i = this.notes.length-1; i >= 0; i--) {
+                if (this.notes[i] === note) {
+                    //remove deleted note from array
+                    this.notes.splice(i, 1);
+                    break;
+                }
             }
-        }
+        });
     }
 
 }

@@ -1,3 +1,23 @@
-postit-note section.callout:hover {
-    box-shadow: inset -2px -2px rgba($black, 0.1);
+postit-note {
+    //add a very simple hover effect to notes
+    section.callout:hover {
+        box-shadow: inset -2px -2px rgba($black, 0.1);
+    }
+    //fade out postit while saving
+    section.is-saving {
+        opacity: 0.5;
+        position: relative;
+        //and add 'saving' message
+        &::after {
+            font-size: 0.8em;
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            content: 'Saving...';
+        }
+    }
+    //add line-through for deleting items
+    section.is-deleted {
+        text-decoration: line-through;
+    }
 }

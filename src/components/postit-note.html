@@ -1,4 +1,5 @@
-<section [class.callout]="!model.isNew" (click)="editNote($event)">
+<section [class.callout]="!model.isNew" [class.is-saving]="model.isSaving" [class.is-deleted]="model.isDeleted"
+        (click)="editNote($event)">
     <form (submit)="saveNote($event)">
     <main>
         <div *ng-if="model.isEditing">
