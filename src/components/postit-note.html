@@ -1,18 +1,20 @@
-<section>
+<section [class.isEditing]="model.isEditing">
+    <form (submit)="saveNote($event)">
+    <main>
+        <div *ng-if="model.isEditing">
+            <textarea [(ng-model)]="model.body" placeholder="Body"></textarea>
+        </div>
+        <div *ng-if="!model.isEditing && model.isViewing">
+            {{model.body}}
+        </div>
+    </main>
     <header>
         <div *ng-if="model.isEditing">
             <input [(ng-model)]="model.title" placeholder="Title" />
         </div>
-        <div *ng-if="!model.isEditing">
+        <h2 *ng-if="!model.isEditing" (click)="editNote($event)">
             {{model.title}}
-        </div>
+        </h2>
     </header>
-    <content>
-        <div *ng-if="model.isEditing">
-            <input [(ng-model)]="model.body" placeholder="Body" />
-        </div>
-        <div *ng-if="!model.isEditing">
-            {{model.body}}
-        </div>
-    </content>
+    </form>
 </section>

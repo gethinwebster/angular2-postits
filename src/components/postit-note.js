@@ -1,9 +1,9 @@
-import {ComponentMetadata as Component, ViewMetadata as View, NgIf, formDirectives} from 'angular2/angular2';
-// import {formDirectives} from 'angular2/forms';
+import {Component, View, NgIf, formDirectives, Input, Output, EventEmitter} from 'angular2/angular2';
 
 @Component({
     selector: 'postit-note',
-    properties: ['model']
+    properties: ['model'],
+    events: ['save', 'edit']
 })
 
 @View({
@@ -12,7 +12,22 @@ import {ComponentMetadata as Component, ViewMetadata as View, NgIf, formDirectiv
 })
 
 export class PostitNote {
-    constructor() {
-        console.log(this.model);
+    @Output() save:
+        EventEmitter<any> = new EventEmitter();
+    @Output() edit:
+        EventEmitter<any> = new EventEmitter();
+
+    saveNote(event) {
+        event.preventDefault();
+        console.log('saving note...', this.model);
+        this.save.next(this.model);
+    }
+
+    editNote(event) {
+        event.preventDefault();
+        if (!this.isEditing) {
+            console.log('editing note...', this.model);
+            this.edit.next(this.model);
+        }
     }
 }
