@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "build": "gulp",
-    "start": "gulp dev"
+    "start": "gulp dev",
+    "postinstall": "bower install"
   },
   "dependencies": {
     "angular2": "2.0.0-alpha.46",
@@ -15,6 +16,9 @@
     "gulp": "3.9.0",
     "gulp-rename": "1.2.2",
     "gulp-traceur": "0.17.1",
-    "gulp-webserver": "0.9.1"
+    "gulp-webserver": "0.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-load-plugins": "^1.1.0",
+    "gulp-sass": "^2.1.0"
   }
 }
