@@ -1,18 +1,24 @@
-<section [class.isEditing]="model.isEditing">
+<section [class.callout]="!model.isNew" (click)="editNote($event)">
     <form (submit)="saveNote($event)">
     <main>
         <div *ng-if="model.isEditing">
-            <textarea [(ng-model)]="model.body" placeholder="Body"></textarea>
+            <textarea [(ng-model)]="model.body" placeholder="Body" autofocus></textarea>
         </div>
-        <div *ng-if="!model.isEditing && model.isViewing">
+        <div *ng-if="!model.isEditing">
             {{model.body}}
         </div>
     </main>
     <header>
-        <div *ng-if="model.isEditing">
-            <input [(ng-model)]="model.title" placeholder="Title" />
+        <div *ng-if="model.isEditing" class="input-group">
+            <input type="text" placeholder="Title" class="input-group-field" [(ng-model)]="model.title" />
+            <div class="input-group-button">
+                <input type="submit" value="S" class="button">
+            </div>
+            <div *ng-if="!model.isNew" class="input-group-button">
+                <button type="button" class="button" (click)="deleteNote($event)">D</button>
+            </div>
         </div>
-        <h2 *ng-if="!model.isEditing" (click)="editNote($event)">
+        <h2 *ng-if="!model.isEditing">
             {{model.title}}
         </h2>
     </header>

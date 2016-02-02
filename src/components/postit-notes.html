@@ -1,3 +1,5 @@
-<add-postit (click)="add()"></add-postit>
-
-<postit-note *ng-for="#note of notes" [model]="note" (save)="saveNote($event)" (edit)="editNote($event)"></postit-note>
+<div class="small-12 medium-8 large-6 columns small-centered">
+    <postit-note *ng-for="#note of notes" [model]="note"
+        (save)="saveNote($event)" (edit)="editNote($event)" (delete)="deleteNote($event)">
+    </postit-note>
+</div>
