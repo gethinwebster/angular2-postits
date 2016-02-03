@@ -62,7 +62,11 @@ module.exports = {
   sassLoader: {
     outputStyle: 'compressed',
     precision: 10,
-    sourceComments: false
+    sourceComments: false,
+    includePaths: [
+        './bower_components/foundation-sites/scss/',
+        './bower_components/motion-ui/src/'
+    ]
   },
 
   plugins: [
