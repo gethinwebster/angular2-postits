@@ -1,26 +1,26 @@
-import {Component, View} from 'angular2/core';
+import {Component} from 'angular2/core';
 import {NgFor} from 'angular2/common';
 
 import {PostitNote} from '../postit-note/postit-note';
 
 import Postit from '../../models/postit';
 
-@Component({
-    selector: 'postit-notes'
-})
+const template: string = require('./postit-notes.html');
 
-@View({
+@Component({
     directives: [NgFor, PostitNote],
-    templateUrl: 'components/postit-notes/postit-notes.html'
+    selector: 'postit-notes',
+    template
 })
 
 export class PostitNotes {
 
     isLoading: boolean = false;
     notes: Array<Postit>;
+    loading: Promise<any>;
 
     constructor() {
-        this.getNotes();
+        this.loading = this.getNotes();
     }
 
     /**
@@ -28,9 +28,9 @@ export class PostitNotes {
      * 
      * @method getNotes
      */
-    getNotes(): void {
+    getNotes(): Promise<any> {
         this.isLoading = true;
-        Postit.loadPostits().then(this.loadNotes.bind(this));
+        return Postit.loadPostits().then(this.loadNotes.bind(this));
     }
 
     /**

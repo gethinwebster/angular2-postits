@@ -1,5 +1,5 @@
 <div class="small-12 medium-8 large-6 columns small-centered">
-    <div *ngIf="isLoading">Loading...</div>
+    <div *ngIf="isLoading" class="loading">Loading...</div>
     <postit-note *ngFor="#note of notes" [model]="note"
         (save)="saveNote($event)" (edit)="editNote($event)" (delete)="deleteNote($event)">
     </postit-note>

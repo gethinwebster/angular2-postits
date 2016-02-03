@@ -1,19 +1,17 @@
-import {Component, View, Output, EventEmitter} from 'angular2/core';
+import {Component, Output, EventEmitter} from 'angular2/core';
 import {NgIf} from 'angular2/common';
 
 import Postit from '../../models/postit';
 
 import {Autofocus} from '../../directives/Autofocus';
 
-@Component({
-    selector: 'postit-note',
-    properties: ['model']/*,
-    events: ['save', 'edit', 'delete']*/
-})
+const template: string = require('./postit-note.html');
 
-@View({
+@Component({
     directives: [NgIf, Autofocus],
-    templateUrl: 'components/postit-note/postit-note.html'
+    selector: 'postit-note',
+    properties: ['model'],
+    template
 })
 
 export class PostitNote {
@@ -22,19 +20,19 @@ export class PostitNote {
      * @property {Postit} model     The Postit to save
      */
     @Output() save:
-        EventEmitter<any> = new EventEmitter();
+        EventEmitter<Postit> = new EventEmitter();
     /**
      * @event edit
      * @property {Postit} model     The Postit to edit
      */
     @Output() edit:
-        EventEmitter<any> = new EventEmitter();
+        EventEmitter<Postit> = new EventEmitter();
     /**
      * @event delete
      * @property {Postit} model     The Postit to delete
      */
     @Output() delete:
-        EventEmitter<any> = new EventEmitter();
+        EventEmitter<Postit> = new EventEmitter();
 
     model: Postit;
 
