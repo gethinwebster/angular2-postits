@@ -8,10 +8,6 @@
     ],
     "ban": false,
     "class-name": true,
-    "comment-format": [
-      true,
-      "check-space"
-    ],
     "curly": false,
     "eofline": true,
     "forin": true,
@@ -96,7 +92,6 @@
     "typedef": [
       true,
       "call-signature",
-      "parameter",
       "property-declaration",
       "member-variable-declaration"
     ],

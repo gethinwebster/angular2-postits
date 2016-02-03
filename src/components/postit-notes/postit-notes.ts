@@ -28,7 +28,7 @@ export class PostitNotes {
      * 
      * @method getNotes
      */
-    getNotes() {
+    getNotes(): void {
         this.isLoading = true;
         Postit.loadPostits().then(this.loadNotes.bind(this));
     }
@@ -39,7 +39,7 @@ export class PostitNotes {
      * @method loadNotes
      * @param  {Postit[]} notes     The array of notes to load
      */
-    loadNotes(notes) {
+    loadNotes(notes): void {
         this.isLoading = false;
         this.notes = notes;
         console.log('loadNotes:', notes);
@@ -52,7 +52,7 @@ export class PostitNotes {
      * 
      * @method addEmptyNote
      */
-    addEmptyNote() {
+    addEmptyNote(): void {
         //add new note to beginning of array, and begin editing it
         const note = new Postit();
         this.notes.unshift(note);
@@ -65,14 +65,14 @@ export class PostitNotes {
      * @method editNote
      * @param  {Postit} noteToEdit  The note to begin editing
      */
-    editNote(noteToEdit) {
+    editNote(noteToEdit): void {
         if (noteToEdit.isDeleted || noteToEdit.isSaving) {
             return;
         }
         //only one note editable at a time, so save other notes first
         for (let note of this.notes) {
             //don't auto-save first note, as it's not yet been 'created'
-            if (note.isEditing && note != this.notes[0]) {
+            if (note.isEditing && note !== this.notes[0]) {
                 note.save();
             }
         }
@@ -85,7 +85,7 @@ export class PostitNotes {
      * @method saveNote
      * @param  {Postit} note    The note to save
      */
-    saveNote(note) {
+    saveNote(note): void {
         note.save().then(() => {
             //do anything further as necessary
         });
@@ -101,10 +101,10 @@ export class PostitNotes {
      * @method saveNote
      * @param  {Postit} note    The note to save
      */
-    deleteNote(note) {
+    deleteNote(note): void {
         note.deleteNote().then(() => {
             //find index of deleted note
-            for (let i = this.notes.length-1; i >= 0; i--) {
+            for (let i = this.notes.length - 1; i >= 0; i--) {
                 if (this.notes[i] === note) {
                     //remove deleted note from array
                     this.notes.splice(i, 1);

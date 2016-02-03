@@ -4,7 +4,7 @@ import {Directive, ElementRef} from 'angular2/core';
     selector: '[autofocus]'
 })
 export class Autofocus {
-    constructor(el : ElementRef) {
+    constructor(el: ElementRef) {
         el.nativeElement.focus();
-    }    
+    }
 }

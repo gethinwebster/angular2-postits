@@ -1,5 +1,5 @@
-import {Component, View, Input, Output, EventEmitter} from 'angular2/core';
-import {NgIf, FORM_DIRECTIVES} from 'angular2/common';
+import {Component, View, Output, EventEmitter} from 'angular2/core';
+import {NgIf} from 'angular2/common';
 
 import Postit from '../../models/postit';
 
@@ -44,7 +44,7 @@ export class PostitNote {
      * @method saveNote description]
      * @param  {event} event    The event that triggered the save action
      */
-    saveNote(event) {
+    saveNote(event): void {
         event.preventDefault();
         console.log('saving note...', this.model);
         this.save.next(this.model);
@@ -56,7 +56,7 @@ export class PostitNote {
      * @method editNote
      * @param  {event} event    The event that triggered the edit action
      */
-    editNote(event) {
+    editNote(event): void {
         if (!this.model.isEditing) {
             event.preventDefault();
             console.log('editing note...', this.model);
@@ -70,7 +70,7 @@ export class PostitNote {
      * @method deleteNote
      * @param  {event} event    The event that triggered the delete action
      */
-    deleteNote(event) {
+    deleteNote(event): void {
         event.preventDefault();
         console.log('deleting note...', this.model);
         this.delete.next(this.model);

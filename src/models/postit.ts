@@ -1,22 +1,22 @@
-//mocked API methods: loadPostits, savePostit, deletePostit
+// mocked API methods: loadPostits, savePostit, deletePostit
 
-function mock(obj): Promise<any> {
+function mock(obj: any): Promise<any> {
     console.log('mocking...');
     return new Promise(resolve => window.setTimeout(() => {
         console.log('mocking:return', obj);
         resolve(obj);
-    }, 1000))
+    }, 1000));
 }
 
 function loadPostits(): Promise<Array<Postit>> {
-    return mock([])
+    return mock([]);
 }
 
-function savePostit(postit): Promise<Postit> {
+function savePostit(postit: Postit): Promise<Postit> {
     return mock(postit);
 }
 
-function deletePostit(postit): Promise<Postit> {
+function deletePostit(postit: Postit): Promise<Postit> {
     return mock(postit);
 }
 
@@ -25,9 +25,6 @@ function deletePostit(postit): Promise<Postit> {
  * @module  models
  */
 export default class Postit {
-    static loadPostits() {
-        return loadPostits();
-    }
 
     title: string = '';
     body: string = '';
@@ -35,8 +32,12 @@ export default class Postit {
     isEditing: boolean = true;
     isSaving: boolean = false;
     isDeleted: boolean = false;
-    
-    edit() {
+
+    static loadPostits(): Promise<Array<Postit>> {
+        return loadPostits();
+    }
+
+    edit(): void {
         this.isEditing = true;
     }
 
