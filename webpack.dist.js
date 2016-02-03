@@ -82,6 +82,7 @@ module.exports = {
       template: './src/index.html'
     }),
     new UglifyJsPlugin({
+      mangle: false,
       compress: {
         dead_code: true,
         screw_ie8: true,

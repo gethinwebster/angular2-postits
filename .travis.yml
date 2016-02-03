@@ -1,24 +1,23 @@
 sudo: required
 dist: trusty
-
 language: node_js
-
 node_js:
-  - 5.2
-
+- 5.2
 before_install:
-  - export CHROME_BIN=chromium-browser
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - npm install -g bower
-
+- export CHROME_BIN=chromium-browser
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- npm install -g bower
 install:
-  - npm install
-
+- npm install
 script:
-  - ./node_modules/.bin/gulp dist
-
+- npm test
 notifications:
   email:
     on_failure: change
     on_success: change
+deploy:
+  provider: heroku
+  app: gethin-postits
+  api_key:
+    secure: WkZEQD910mB9InxzdhX8laFpE6t31UUepD1KmBtPIUxjM+ofLt+2HeOFtLOGeTpXIUhtykk2xGuQRWbuLHiucDQI9JmTazNAPIg+o4SMFYVCK8xUvOKXztqoeneZgg/9JL75pWhlznhgH4fNcpN4lz0Kx7dYcrXKduwJ0SI2SdBgzx0Hyn1/kOMIfIrRTLK5bqS8b2HJ/Qbn2YQSzuZiNS7EjGckxFdfVuVGXZ9wSTriyyJqy/DRtc+ZPDjAWHnLIoBtM/QszLtYuohqc8THO09jXL+UJu+qzSqw2gOR06y1Bk4pSvvQuoAqCzalWwhTxkDIAnycm2++i9qjk4LZ4rflrO5Td2EzyBBoncwDHtuzxcSv9096mAHhaG2wLZk2/FbSEov5H3jBMBpZwBwliX0NeGhaCB6L8PJQcuuMqy10GyE34YOirrCtnqXWpnHUhS8c8h24k3AyWXKHz9yvd75HxRtJL7wb8YUsTYsRM3MxZLx6PYlZznmVPiGe6OjgeVuEEf3eRHRlt1rK/40dxdl/JVd1QMPqQ6WcS26Z1uLa97yJnAFHukL2ty4zcjmC3nVFTM976SVC71k+MkX9652VmQ1XSXEjdR36jFFIhIgxiG64S5q8nYY5SOYgk4FoqZVCIyirAHIEi1ISo5uPq+KyME9TZZ17GZHmj1+gjzU=
