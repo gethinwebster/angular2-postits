@@ -1,96 +1,153 @@
-var gulp = require('gulp'),
-    rename = require('gulp-rename'),
-    traceur = require('gulp-traceur'),
-    webserver = require('gulp-webserver');
-var $ = require('gulp-load-plugins')();
+'use strict';
 
-// run init tasks
-gulp.task('default', ['dependencies', 'foundation-deps', 'js', 'html', 'sass']);
+const browserSync   = require('browser-sync');
+const del           = require('del');
+const gulp          = require('gulp');
+const gutil         = require('gulp-util');
+const historyApi    = require('connect-history-api-fallback');
+const karma         = require('karma');
+const tslint        = require('gulp-tslint');
+const webpack       = require('webpack');
+const WebpackServer = require('webpack-dev-server');
 
-// run development task
-gulp.task('dev', ['dependencies', 'foundation-deps', 'watch', 'serve']);
 
-// serve the build dir
-gulp.task('serve', function () {
-  gulp.src('build')
-    .pipe(webserver({
-      open: true
-    }));
+//=========================================================
+//  PATHS
+//---------------------------------------------------------
+const paths = {
+  src: {
+    ts: 'src/**/*.ts'
+  },
+
+  target: 'target'
+};
+
+
+//=========================================================
+//  CONFIG
+//---------------------------------------------------------
+const config = {
+  browserSync: {
+    files: [paths.target + '/**/*'],
+    notify: false,
+    open: false,
+    port: 3000,
+    reloadDelay: 500,
+    server: {
+      baseDir: paths.target
+    }
+  },
+
+  karma: {
+    configFile: __dirname + '/karma.conf.js'
+  },
+
+  tslint: {
+    report: {
+      options: {emitError: true},
+      type: 'verbose'
+    }
+  },
+
+  webpack: {
+    dev: './webpack.dev',
+    dist: './webpack.dist'
+  }
+};
+
+
+//=========================================================
+//  TASKS
+//---------------------------------------------------------
+gulp.task('clean.target', () => del(paths.target));
+
+
+gulp.task('lint', () => {
+  return gulp.src(paths.src.ts)
+    .pipe(tslint())
+    .pipe(tslint.report(
+      config.tslint.report.type,
+      config.tslint.report.options
+    ));
 });
 
-// watch for changes and run the relevant task
-gulp.task('watch', function () {
-  gulp.watch('src/**/*.js', ['js']);
-  gulp.watch('src/**/*.html', ['html']);
-  gulp.watch('src/**/*.scss', ['sass']);
+
+gulp.task('serve', done => {
+  config.browserSync.server.middleware = [historyApi()];
+  browserSync.create()
+    .init(config.browserSync, done);
 });
 
-// move dependencies into build dir
-gulp.task('dependencies', function () {
-  return gulp.src([
-    'node_modules/traceur/bin/traceur-runtime.js',
-    'node_modules/systemjs/dist/system-csp-production.src.js',
-    'node_modules/systemjs/dist/system.js',
-    'node_modules/reflect-metadata/Reflect.js',
-    'node_modules/angular2/bundles/angular2.js'
-  ])
-    .pipe(gulp.dest('build/lib'));
+
+gulp.task('serve.dev', done => {
+  let conf = require(config.webpack.dev);
+  let compiler = webpack(conf);
+  let server = new WebpackServer(compiler, conf.devServer);
+  let host = conf.devServer.host;
+  let port = conf.devServer.port;
+
+  server.listen(port, host, () => {
+    gutil.log(gutil.colors.gray('-------------------------------------------'));
+    gutil.log('WebpackDevServer:', gutil.colors.magenta(`http://${host}:${port}`));
+    gutil.log(gutil.colors.gray('-------------------------------------------'));
+    done();
+  });
 });
 
-gulp.task('foundation-deps', function () {
-  return gulp.src([
-    'bower_components/jquery/dist/jquery.js',
-    'bower_components/what-input/what-input.js',
-    'bower_components/foundation-sites/dist/foundation.js'
-  ])
-    .pipe(gulp.dest('build/lib'));
+
+gulp.task('ts', done => {
+  let conf = require(config.webpack.dist);
+  webpack(conf).run((error, stats) => {
+    if (error) throw new gutil.PluginError('webpack', error);
+    gutil.log(stats.toString(conf.stats));
+    done();
+  });
 });
 
-// transpile & move js
-gulp.task('js', function () {
-  return gulp.src('src/**/*.js')
-    .pipe(rename({
-      extname: ''
-    }))
-    .pipe(traceur({
-      modules: 'instantiate',
-      moduleName: true,
-      annotations: true,
-      types: true,
-      memberVariables: true
-    }))
-    .pipe(rename({
-      extname: '.js'
-    }))
-    .pipe(gulp.dest('build'));
+
+//===========================
+//  BUILD
+//---------------------------
+gulp.task('build', gulp.series(
+  'clean.target',
+  'ts'
+));
+
+
+//===========================
+//  DEVELOP
+//---------------------------
+gulp.task('default', gulp.task('serve.dev'));
+
+
+//===========================
+//  TEST
+//---------------------------
+function karmaServer(options, done) {
+  let server = new karma.Server(options, exitCode => {
+    if (exitCode > 0) process.exit(exitCode);
+    done();
+  });
+  server.start();
+}
+
+
+gulp.task('test', done => {
+  config.karma.singleRun = true;
+  karmaServer(config.karma, done);
 });
 
-// move html
-gulp.task('html', function () {
-  return gulp.src('src/**/*.html')
-    .pipe(gulp.dest('build'))
+
+gulp.task('test.watch', done => {
+  karmaServer(config.karma, done);
 });
 
-var sassPaths = [
-  'bower_components/foundation-sites/scss',
-  'bower_components/motion-ui/src'
-];
 
-// compile scss
-gulp.task('sass', function() {
-  return gulp.src('src/scss/app.scss')
-    .pipe($.sass({
-      includePaths: sassPaths
-    })
-      .on('error', $.sass.logError))
-    .pipe($.autoprefixer({
-      browsers: ['last 2 versions', 'ie >= 9']
-    }))
-    .pipe(gulp.dest('build/css'));
-});
-
-// move css
-gulp.task('css', function () {
-  return gulp.src('src/**/*.css')
-    .pipe(gulp.dest('build'))
-});
+//===========================
+//  RELEASE
+//---------------------------
+gulp.task('dist', gulp.series(
+  'lint',
+  'test',
+  'build'
+));

@@ -1,8 +1,9 @@
-import {Component, View, NgFor} from 'angular2/angular2';
+import {Component, View} from 'angular2/core';
+import {NgFor} from 'angular2/common';
 
-import {PostitNote} from './postit-note';
+import {PostitNote} from '../postit-note/postit-note';
 
-import Postit from '../models/postit';
+import Postit from '../../models/postit';
 
 @Component({
     selector: 'postit-notes'
@@ -10,10 +11,13 @@ import Postit from '../models/postit';
 
 @View({
     directives: [NgFor, PostitNote],
-    templateUrl: 'components/postit-notes.html'
+    templateUrl: 'components/postit-notes/postit-notes.html'
 })
 
 export class PostitNotes {
+
+    isLoading: boolean = false;
+    notes: Array<Postit>;
 
     constructor() {
         this.getNotes();
@@ -38,6 +42,7 @@ export class PostitNotes {
     loadNotes(notes) {
         this.isLoading = false;
         this.notes = notes;
+        console.log('loadNotes:', notes);
         //add an empty note, as creation placeholder
         this.addEmptyNote();
     }

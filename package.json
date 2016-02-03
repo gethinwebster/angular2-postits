@@ -1,24 +1,60 @@
 {
-  "name": "postit-notes",
-  "version": "0.0.0",
+  "name": "angular2-postits",
+  "version": "0.1.0",
+  "description": "Angular2 Postit Notes",
+  "homepage": "https://github.com/gethinwebster/angular2-postits",
+  "repository": "https://github.com/gethinwebster/angular2-postits.git",
+  "author": {
+    "name": "Gethin Webster",
+    "email": "gethinw@gmail.com"
+  },
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=5.2"
+  },
   "scripts": {
-    "build": "gulp",
-    "start": "gulp dev",
-    "postinstall": "bower install"
+    "build": "npm run clean && npm test && ./node_modules/.bin/webpack --config webpack.dist.js --progress",
+    "clean": "./node_modules/.bin/de ./target",
+    "postinstall": "./node_modules/.bin/typings install",
+    "start": "./node_modules/.bin/webpack-dev-server --config webpack.dev.js --progress",
+    "test": "./node_modules/.bin/karma start --single-run"
   },
   "dependencies": {
-    "angular2": "2.0.0-alpha.46",
-    "reflect-metadata": "0.1.1",
-    "systemjs": "0.18.17",
-    "traceur": "0.0.92"
+    "angular2": "2.0.0-beta.2",
+    "es6-shim": "~0.34.2",
+    "rxjs": "5.0.0-beta.1"
   },
   "devDependencies": {
-    "gulp": "3.9.0",
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-load-plugins": "^1.1.0",
-    "gulp-rename": "1.2.2",
-    "gulp-sass": "^2.1.0",
-    "gulp-traceur": "0.17.1",
-    "gulp-webserver": "0.9.1"
+    "autoprefixer": "~6.3.1",
+    "browser-sync": "~2.11.1",
+    "connect-history-api-fallback": "~1.1.0",
+    "css-loader": "~0.23.1",
+    "del": "~2.2.0",
+    "del-cli": "~0.1.2",
+    "extract-text-webpack-plugin": "~1.0.1",
+    "gulp": "gulpjs/gulp.git#4.0",
+    "gulp-tslint": "~4.3.1",
+    "gulp-util": "~3.0.7",
+    "html-webpack-plugin": "~1.7.0",
+    "jasmine-core": "~2.4.1",
+    "karma": "0.13.18",
+    "karma-chrome-launcher": "~0.2.2",
+    "karma-jasmine": "~0.3.6",
+    "karma-sourcemap-loader": "~0.3.7",
+    "karma-webpack": "~1.7.0",
+    "node-sass": "~3.4.2",
+    "postcss-loader": "~0.8.0",
+    "raw-loader": "~0.5.1",
+    "reflect-metadata": "0.1.3",
+    "sass-loader": "~3.1.2",
+    "style-loader": "~0.13.0",
+    "ts-loader": "~0.8.0",
+    "tslint": "~3.3.0",
+    "typings": "~0.6.3",
+    "typescript": "~1.7.5",
+    "webpack": "~1.12.12",
+    "webpack-dev-server": "~1.14.1",
+    "zone.js": "0.5.10"
   }
 }
