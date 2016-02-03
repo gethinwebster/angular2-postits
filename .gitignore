@@ -31,3 +31,4 @@ typings/
 __MACOSX/
 .DS_Store
 Thumbs.db
+bower_components
